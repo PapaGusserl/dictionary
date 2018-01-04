@@ -7,15 +7,16 @@ defmodule Dictionary do
   Dictionary v.0.0.1. by Papa_Gusserl
 
   This is module can:
-  1) create any dictionaries
+  1) create any dictionaries(func start/3)
   2) general thing, that you must to know - one lang always be a base, that shows to you immedetly, but backyard langs you can see juxt in data base
-  3) you can translate just from English
-  4) you can translate your's words in two and more dictionary's
+  3) you can translate just from English(func translate/3)
+  4) you can translate your's words in two and more dictionary's(func add_dictionary/4)
   So, you can do this immnedetly.
   """
 
   @doc """
-  this function can create new dictionary. Remember, that it must do be the first function, that you could start
+  this function can create new dictionary. Remember, that it must do be the first function, that you could start. 
+  Example: Dictionary.start("en", ["de", "lt"], :dictionary) -->> pid of supervisor
   """
  
   def start(base_lang, backyard_langs \\ ["de"], dictionary) do
@@ -33,6 +34,9 @@ defmodule Dictionary do
 
   @doc """
   this function could help you to translate your words
+
+  translate(worker_pid, :dictionary, "word")
+  translate(:dictionary, "word", supervisors_pid) if you need to translate word with primary settings
   """
   def translate(pid, dict, word) when is_pid(pid) do
     DG.translate(pid, word, dict)
