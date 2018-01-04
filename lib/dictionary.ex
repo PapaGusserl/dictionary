@@ -48,4 +48,12 @@ defmodule Dictionary do
       |> Enum.find( fn {x, _, _, _} -> x == DictServer end)
      translate(worker_pid, dict, word)
   end
+
+  @doc """
+  func show/1 showing to you your dictionary
+  """
+  def show(dictionary) do
+      DictDatabase.show_all(dict) 
+  end
+
 end
