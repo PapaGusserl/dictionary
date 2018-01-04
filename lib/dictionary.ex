@@ -52,7 +52,7 @@ defmodule Dictionary do
   @doc """
   func show/1 showing to you your dictionary
   """
-  def show(dictionary) do
+  def show(dict) do
       DictDatabase.show_all(dict) 
   end
 
