@@ -1,0 +1,19 @@
+defmodule DictSupervisor do
+  use  Supervisor
+
+   def start_link(base, back) do
+    Supervisor.start_link([
+       {DictServer, [base, back] }
+    ], strategy: :one_for_one)
+     
+  end
+
+   def add_child(sup_pid, base, back, dict) do
+    Supervisor.start_child(sup_pid, [{base, back, dict}])
+ end
+
+  #  def delete_child(name) do
+    #    {:deleted, name }
+    # end
+
+    end
