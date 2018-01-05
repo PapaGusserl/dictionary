@@ -1,6 +1,7 @@
 defmodule Dictionary do
   alias DictSupervisor, as: DS
   alias DictServer, as: DG
+  use Application
 
    @moduledoc """
 
@@ -19,9 +20,10 @@ defmodule Dictionary do
   Example: Dictionary.start("en", ["de", "lt"], :dictionary) -->> pid of supervisor
   """
  
-  def start(base_lang, backyard_langs \\ ["de"], dictionary) do
+  def start(base_lang \\ "ru", backyard_langs \\ [], dictionary \\ :russian) do
     {:ok, sup_pid} = DS.start_link(base_lang,  backyard_langs, dictionary)
-    sup_pid
+    remember(sup_pid)
+    {:ok, sup_pid}
   end
 
   @doc """
@@ -42,7 +44,7 @@ defmodule Dictionary do
     DG.translate(pid, word, dict)
   end
 
-  def translate(dict, word, sup_pid) do
+  def translate(dict \\ :russian , word, sup_pid) do
     IO.puts "#{inspect sup_pid}"
     {_, worker_pid, _, _} = Supervisor.which_children(sup_pid)
       |> Enum.find( fn {x, _, _, _} -> x == DictServer end)
@@ -52,8 +54,15 @@ defmodule Dictionary do
   @doc """
   func show/1 showing to you your dictionary
   """
-  def show(dict) do
+  def show(dict \\ :russian) do
       DictDatabase.show_all(dict) 
   end
+  
+  #####################
+  # Private functions #
+  #####################
 
+  defp remember(sup_pid) do
+    :ets.new
+  end
 end

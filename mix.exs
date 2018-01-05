@@ -6,6 +6,7 @@ defmodule Dictionary.Mixfile do
       app: :dictionary,
       version: "0.1.0",
       elixir: "~> 1.5",
+      build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps()
     ]
@@ -14,7 +15,8 @@ defmodule Dictionary.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-     applications: [:logger, :httpoison ]
+      applications: [:logger, :httpoison ],
+               mod: {Dictionary, []}
     ]
   end
 
