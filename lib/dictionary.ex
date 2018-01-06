@@ -22,7 +22,7 @@ defmodule Dictionary do
  
   def start(base_lang \\ "ru", backyard_langs \\ [], dictionary \\ :russian) do
     {:ok, sup_pid} = DS.start_link(base_lang,  backyard_langs, dictionary)
-    remember(sup_pid)
+    remember!(sup_pid)
     {:ok, sup_pid}
   end
 
@@ -44,8 +44,8 @@ defmodule Dictionary do
     DG.translate(pid, word, dict)
   end
 
-  def translate(dict \\ :russian , word, sup_pid) do
-    IO.puts "#{inspect sup_pid}"
+  def translate(dict \\ :russian , word) do
+    sup_pid = remember?()
     {_, worker_pid, _, _} = Supervisor.which_children(sup_pid)
       |> Enum.find( fn {x, _, _, _} -> x == DictServer end)
      translate(worker_pid, dict, word)
@@ -62,7 +62,13 @@ defmodule Dictionary do
   # Private functions #
   #####################
 
-  defp remember(sup_pid) do
-    :ets.new
+  defp remember!(sup_pid) do
+    table = :ets.new(:sup_pid, [:set, :protected])
+    :ets.insert(table, {"sup", sup_pid})
+  end
+
+  defp remember?() do
+    [{"sup", sup_pid}] = :ets.lookup(:sup_pid, "sup")
+    sup_pid
   end
 end
