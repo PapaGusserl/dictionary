@@ -63,12 +63,10 @@ defmodule Dictionary do
   #####################
 
   defp remember!(sup_pid) do
-    table = :ets.new(:sup_pid, [:set, :protected])
-    :ets.insert(table, {"sup", sup_pid})
+    Agent.start_link(fn -> sup_pid end, name: Sup)
   end
 
   defp remember?() do
-    [{"sup", sup_pid}] = :ets.lookup(:sup_pid, "sup")
-    sup_pid
+    Agent.get(Sup, &(&1))
   end
 end
