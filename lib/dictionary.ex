@@ -41,15 +41,16 @@ defmodule Dictionary do
   translate(worker_pid, :dictionary, "word")
   translate("word") if you need to translate word with default 
   """
-  def translate(dict \\ :russian , word) when is_atom(dict) do
+  def translate(word) do
     sup_pid = remember?()
     {_, worker_pid, _, _} = Supervisor.which_children(sup_pid)
       |> Enum.find( fn {x, _, _, _} -> x == DictServer end)
-     DG.translate(worker_pid, word, dict)
+     DG.translate(worker_pid, word, :russian)
   end
 
   def translate(id, word) do
     {_id, dict, pid} = state?(id)
+    IO.puts "#{inspect pid}"
     DG.translate(pid, word, dict)
   end
 
