@@ -7,17 +7,14 @@ defmodule Dictionary do
 
   Dictionary v.0.0.1. by Papa_Gusserl
 
-  This is module can:
-  1) create any dictionaries(func start/3)
-  2) general thing, that you must to know - one lang always be a base, that shows to you immedetly, but backyard langs you can see juxt in data base
-  3) you can translate just from English(func translate/3)
-  4) you can translate your's words in two and more dictionary's(func add_dictionary/4)
-  So, you can do this immnedetly.
+  translate/1 to translate from English("en") to Russian("ru") \n
+  translate/2 to translate from English("en") to your's own dictionaries( For example: Portugal("pt"), France("fr") ). For more information you can h Dictionary.langs \n
+  show/1 to show for you yours dictionaries \n
+  add_dictionary/4 to create your own dictionaries \n
   """
 
   @doc """
-  this function can create new dictionary. Remember, that it must do be the first function, that you could start. 
-  Example: Dictionary.start("en", ["de", "lt"], :dictionary) -->> pid of supervisor
+  this function can create new dictionary. Remember, that it must do be the first function, that you could start. \n
   """
  
   def start(_type, _args) do
@@ -26,21 +23,12 @@ defmodule Dictionary do
     {:ok, sup_pid}
   end
 
-  @doc """
-  this fuction can add new dictionary in your app. But there you must to write id for this dictionary. I think you need to write something remembering
-  """
   def add_dictionary(id, base, back, dict) do
     sup_pid = remember?()
     {:ok, worker_pid} = DS.add_child(sup_pid, base, back, id, dict)
     state!(id, dict, worker_pid)
   end
 
-  @doc """
-  this function could help you to translate your words
-
-  translate(worker_pid, :dictionary, "word")
-  translate("word") if you need to translate word with default 
-  """
   def translate(word) do
     sup_pid = remember?()
     {_, worker_pid, _, _} = Supervisor.which_children(sup_pid)
@@ -54,14 +42,39 @@ defmodule Dictionary do
     DG.translate(pid, word, dict)
   end
 
-
-  @doc """
-  func show/1 showing to you your dictionary
-  """
   def show(dict \\ :russian) do
       DictDatabase.show_all(dict) 
   end
-  
+
+  @doc """
+  албанский sq  мальтийский mt  амхарский am  македонский mk \n
+  английский  en  маори mi  арабский  ar  маратхи mr \n
+  армянский hy  марийский mhr  африкаанс af  монгольский mn \n
+  баскский  eu  немецкий  de   башкирский  ba  непальский  ne \n
+  белорусский be  норвежский  no   бенгальский bn  панджаби  pa \n
+  бирманский  my  папьяменто  pap  болгарский  bg  персидский  fa \n
+  боснийский  bs  польский  pl  валлийский  cy  португальский pt \n
+  венгерский  hu  румынский ro  вьетнамский vi  русский ru \n
+  гаитянский (креольский) ht  себуанский  ceb  галисийский gl  сербский  sr \n
+  голландский nl  сингальский si  горномарийский  mrj словацкий sk \n
+  греческий el  словенский  sl  грузинский  ka  суахили sw \n
+  гуджарати gu  сунданский  su  датский da  таджикский  tg \n
+  иврит he  тайский th  идиш  yi  тагальский  tl \n
+  индонезийский id  тамильский  ta  ирландский  ga  татарский tt \n
+  итальянский it  телугу  te  исландский  is  турецкий  tr \n
+  испанский es  удмуртский  udm  казахский kk  узбекский uz\n
+  каннада kn  украинский  uk  каталанский ca  урду  ur\n
+  киргизский  ky  финский fi  китайский zh  французский fr\n
+  корейский ko  хинди hi  коса  xh  хорватский  hr\n
+  кхмерский km  чешский cs  лаосский  lo  шведский  sv\n
+  латынь  la  шотландский gd  латышский lv  эстонский et\n
+  литовский lt  эсперанто eo  люксембургский  lb  яванский  jv\n
+  малагасийский mg  японский  ja  малайский ms    
+  """
+  def langs() do
+    IO.puts "Try to write in shell 'h Dictionary.langs'"
+  end
+
   #####################
   # Private functions #
   #####################
