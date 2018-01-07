@@ -32,7 +32,7 @@ defmodule Dictionary do
   def add_dictionary(id, base, back, dict) do
     sup_pid = remember?()
     {:ok, worker_pid} = DS.add_child(sup_pid, base, back, id, dict)
-    worker_pid
+    state!(id, dict, worker_pid)
   end
 
   @doc """
@@ -41,16 +41,18 @@ defmodule Dictionary do
   translate(worker_pid, :dictionary, "word")
   translate("word") if you need to translate word with default 
   """
-  def translate(pid, dict, word) when is_pid(pid) do
-    DG.translate(pid, word, dict)
-  end
-
-  def translate(dict \\ :russian , word) do
+  def translate(dict \\ :russian , word) when is_atom(dict) do
     sup_pid = remember?()
     {_, worker_pid, _, _} = Supervisor.which_children(sup_pid)
       |> Enum.find( fn {x, _, _, _} -> x == DictServer end)
-     translate(worker_pid, dict, word)
+     DG.translate(worker_pid, word, dict)
   end
+
+  def translate(id, word) do
+    {_id, dict, pid} = state?(id)
+    DG.translate(pid, word, dict)
+  end
+
 
   @doc """
   func show/1 showing to you your dictionary
@@ -65,9 +67,19 @@ defmodule Dictionary do
 
   defp remember!(sup_pid) do
     Agent.start_link(fn -> sup_pid end, name: Sup)
+    Agent.start_link(fn-> [] end, name: Worker)
   end
 
   defp remember?() do
     Agent.get(Sup, &(&1))
+  end
+
+  defp state!(id, dict, pid) do
+    Agent.update(Worker, fn list -> [{id, dict, pid} | list ] end)
+  end
+
+  def state?(id) do 
+    Agent.get(Worker, fn list -> list end)
+    |> Enum.find(fn {x, _, _} -> x==id end)
   end
 end
