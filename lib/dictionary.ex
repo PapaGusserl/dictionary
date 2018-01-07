@@ -20,8 +20,8 @@ defmodule Dictionary do
   Example: Dictionary.start("en", ["de", "lt"], :dictionary) -->> pid of supervisor
   """
  
-  def start(base_lang \\ "ru", backyard_langs \\ [], dictionary \\ :russian) do
-    {:ok, sup_pid} = DS.start_link(base_lang,  backyard_langs, dictionary)
+  def start(_type, _args) do
+    {:ok, sup_pid} = DS.start_link("ru", [], :russian)
     remember!(sup_pid)
     {:ok, sup_pid}
   end
@@ -29,7 +29,8 @@ defmodule Dictionary do
   @doc """
   this fuction can add new dictionary in your app. But there you must to write id for this dictionary. I think you need to write something remembering
   """
-  def add_dictionary(sup_pid, id, base, back, dict) do
+  def add_dictionary(id, base, back, dict) do
+    sup_pid = remember?()
     {:ok, worker_pid} = DS.add_child(sup_pid, base, back, id, dict)
     worker_pid
   end
@@ -38,7 +39,7 @@ defmodule Dictionary do
   this function could help you to translate your words
 
   translate(worker_pid, :dictionary, "word")
-  translate(:dictionary, "word", supervisors_pid) if you need to translate word with primary settings
+  translate("word") if you need to translate word with default 
   """
   def translate(pid, dict, word) when is_pid(pid) do
     DG.translate(pid, word, dict)
