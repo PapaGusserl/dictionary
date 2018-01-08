@@ -28,3 +28,8 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+
+config :dictionary,
+  mailgun_domain: "https://api.mailgun.net/v3/sandboxc463b3419d224adebf4b4af627a79164.mailgun.org",
+  mailgun_key: "key-e46f676ae3e3025bca4446f8855a3abe"
