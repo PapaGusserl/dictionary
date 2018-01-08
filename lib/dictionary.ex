@@ -11,6 +11,7 @@ defmodule Dictionary do
   translate/2 to translate from English("en") to your's own dictionaries( For example: Portugal("pt"), France("fr") ). For more information you can h Dictionary.langs \n
   show/1 to show for you yours dictionaries \n
   add_dictionary/4 to create your own dictionaries \n
+  support/1 to connect with author
   """
 
   @doc """
@@ -44,6 +45,10 @@ defmodule Dictionary do
 
   def show(dict \\ :russian) do
       DictDatabase.show_all(dict) 
+  end
+
+  def support(content) do
+    DictEmail.sender(content)
   end
 
   @doc """
