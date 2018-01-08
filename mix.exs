@@ -4,7 +4,7 @@ defmodule Dictionary.Mixfile do
   def project do
     [
       app: :dictionary,
-      version: "0.1.0",
+      version: "0.0.1",
       elixir: "~> 1.5",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -23,9 +23,9 @@ defmodule Dictionary.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-    {:httpoison, "~> 0.9.0"},
-		{:json,      "~> 0.3.0"}
- 
+      {:httpoison, "~> 0.9.0"},
+	  {:json,      "~> 0.3.0"},
+      {:mailgun,   "~> 0.1.2"}
     ]
   end
 end
