@@ -24,7 +24,6 @@ defmodule Dictionary.Mixfile do
   def application do
     [
       applications: [:logger, :httpoison ],
-               mod: {Dictionary, []}
     ]
   end
 
