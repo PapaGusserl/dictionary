@@ -8,7 +8,15 @@ defmodule Dictionary.Mixfile do
       elixir: "~> 1.5",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      escript: escript()
+    ]
+  end
+
+  defp escript do
+    [
+      main_module: Dict.CLI,
+      name: :dict
     ]
   end
 
