@@ -1,0 +1,9 @@
+{application,dictionary,
+             [{description,"dictionary"},
+              {modules,['Elixir.DictDatabase','Elixir.DictServer',
+                        'Elixir.DictSupervisor','Elixir.DictWorker',
+                        'Elixir.Dictionary']},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {applications,[kernel,stdlib,elixir,logger,httpoison]},
+              {mod,{'Elixir.Dictionary',[]}}]}.
